@@ -1,4 +1,5 @@
 
+//Dependencies
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
@@ -11,7 +12,7 @@ var connection = mysql.createConnection({
 });
 
 
-
+//The Start function displays the store catalog.
 function start(){
 	connection.connect(function(err){
 		if (err) throw err;
@@ -33,6 +34,7 @@ function start(){
 };
 
 
+//The Purchases function handles purchasing of items.
 function purchases(){
 	inquirer.prompt([
 		{
@@ -72,7 +74,7 @@ function purchases(){
 			var newQty = resData[fixedId].stock_quantity - order.qty;
 			var totalPrice = itemPrice*order.qty;
 
-
+			//Purchase failure prompt and subsequent menu options. 'Display Store Catalog Again' does not work at this time.
 			if (order.qty > resData[fixedId].stock_quantity) {
 
 				console.log("We're terribly sorry!");
@@ -100,6 +102,7 @@ function purchases(){
 					}
 				});
 			}
+			//Successful purchase prompt and subsequent menu options. 'Display Store Catalog Again' does not work at this time.
 			else {
 				connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?", [newQty, order.productId], function(err, purchData){
 					if (err) throw err;

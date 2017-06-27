@@ -67,10 +67,16 @@ function purchases(){
 			//so I've adjusted for it with the fixedId variable here.
 			var fixedId = order.productId - 1;
 
+			//Setting variables up for purchase at line 104.
+			var itemPrice = resData[fixedId].price;
+			var newQty = resData[fixedId].stock_quantity - order.qty;
+			var totalPrice = itemPrice*order.qty;
+
+
 			if (order.qty > resData[fixedId].stock_quantity) {
 
 				console.log("We're terribly sorry!");
-				console.log("\nWe do not have " + order.qty + "units of " + resData[fixedId].product_name + " in stock.");
+				console.log("\nWe do not have " + order.qty + " units of " + resData[fixedId].product_name + " in stock.");
 				console.log("\nThere are only " + resData[fixedId].stock_quantity + " units in stock.");
 
 				inquirer.prompt([
@@ -78,27 +84,50 @@ function purchases(){
 						type: "list",
 						name: "retry",
 						message: "What would you like to do?",
-						choices: ["Retry purchasing product", "Display store catalog again", "Exit"]
+						choices: ["Display store catalog again", "Exit"]
 					}
 				]).then(function(choice){
 
-					if (choice == "Retry purchasing product") {
-						purchases();
-					} 
-					else if (choice == "Display store catalog again") {
+					if (choice == "Display store catalog again") {
 						start();
 					}
 					else if (choice == "Exit") {
-						console.log("Thank you for using Bamazon!");
+						console.log("\nThank you for using Bamazon!");
 						console.log("\nWe hope to see you again.");
+						connection.end();
 						connection.destroy();
 						process.exit(-1);
 					}
 				});
 			}
-		// else {
+			else {
+				connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?", [newQty, order.productId], function(err, purchData){
+					if (err) throw err;
+					console.log("\nYour order of " + order.qty + " units of " + resData[fixedId].product_name + " is complete!");
+					console.log("\nThere are " + newQty + " units left in stock.");
+					console.log("\nYour purchase is complete! Total cost: " + totalPrice + " dollars.");
+					inquirer.prompt([
+						{
+							type: "list",
+							name: "retry",
+							message: "What would you like to do?",
+							choices: ["Display store catalog again", "Exit"]
+						}
+					]).then(function(choice){
 
-		// }
+						if (choice == "Display store catalog again") {
+							start();
+						}
+						else if (choice == "Exit") {
+							console.log("\nThank you for using Bamazon!");
+							console.log("\nWe hope to see you again.");
+							connection.end();
+							connection.destroy();
+							process.exit(-1);
+					}
+				});
+				});
+		 	}
 		});
 	});
 };

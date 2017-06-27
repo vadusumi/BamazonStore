@@ -88,10 +88,10 @@ function purchases(){
 					}
 				]).then(function(choice){
 
-					if (choice == "Display store catalog again") {
+					if (choice.retry == "Display store catalog again") {
 						start();
 					}
-					else if (choice == "Exit") {
+					else if (choice.retry == "Exit") {
 						console.log("\nThank you for using Bamazon!");
 						console.log("\nWe hope to see you again.");
 						connection.end();
@@ -115,10 +115,10 @@ function purchases(){
 						}
 					]).then(function(choice){
 
-						if (choice == "Display store catalog again") {
+						if (choice.retry == "Display store catalog again") {
 							start();
 						}
-						else if (choice == "Exit") {
+						else if (choice.retry == "Exit") {
 							console.log("\nThank you for using Bamazon!");
 							console.log("\nWe hope to see you again.");
 							connection.end();

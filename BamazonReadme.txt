@@ -13,17 +13,16 @@ SCREENSHOT GUIDE
 	-Stock quantity is reduced by the order quantity via MySQL.
 	-Price is calculated via MySQL and a bit of math.
 	-Menu displayed.
+		-If user chooses 'exit', the program ends.
 
 -3Bamazon-FailedPurchase-Menu.jpg
 	-If order quantity > stock quantity, the purchase fails.
 	-Menu displayed.
+		-If user chooses 'exit', the program ends.
 
 
 
 ISSUES
 
 -The menu is supposed to call the start() function if the user chooses to display the store catalog again.
-	For unknown reasons, this doesn't work. Nothing happens and no errors are thrown.
-
--The menu is supposed to exit the program if the user chooses to exit.
-	Similarly, nothing happens and no errors are thrown. Used all methods posted in the Homework Slack channel, no dice.
+	This throws an error: "Cannot enqueue Handshake after already enqueuing a Handshake." I think I understand, but I'm not sure how to work around it.
